@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
@@ -8,8 +10,8 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
       final auth = context.read<FirebaseAuthService>();
-      final user = await auth.signInAnonymously();
-      print("🟩 🟩 🟩  uid = ${user.uid}");
+      final user = await (auth.signInAnonymously());
+      print("🟩 🟩 🟩  uid = ${user?.uid}");
     } catch (e) {
       print("🟥 🟥 🟥  Sign In Anonymously error " + e.toString());
     }
@@ -29,7 +31,7 @@ class SignInPage extends StatelessWidget {
             ),
           ),
           Center(
-            child: StreamBuilder<Object>(
+            child: StreamBuilder<Object?>(
                 // stream: GetIt.I<BuildFlavor>().stream$,
                 stream: GetIt.I<FirebaseProjectAlias>().stream$,
                 builder: (context, snapshot) {

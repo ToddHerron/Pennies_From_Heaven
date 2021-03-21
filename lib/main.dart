@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ValueNotifier<bool>>(
             create: (_) => ValueNotifier<bool>(false)) // avatarLoading toggle
       ],
-      child: StreamBuilder<Object>(
+      child: StreamBuilder<Object?>(
           stream: getIt<FirebaseProjectAlias>().stream$,
           builder: (context, snapshot) {
             return AuthWidgetBuilder(builder: (context, userSnapshot) {

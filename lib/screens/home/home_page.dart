@@ -31,31 +31,39 @@ class HomePage extends StatelessWidget {
   }
 
   Future<void> _chooseAvatar(BuildContext context) async {
+    var imagePicker;
+    var file;
+    var database;
+    var storage;
+    var downloadUrl;
+
     try {
       // 1. Get image from picker
-      final imagePicker = context.read<ImagePickerService>();
-      final file = await imagePicker.pickImage(source: ImageSource.gallery);
-
-      // 2. Upload the image to remote Storage / get url
-      if (file != null) {
-        // set avatarLoading to true
-
-        final storage = context.read<FirebaseStorageService>();
-        final downloadUrl = await storage.uploadAvatar(file: file);
-
-        // 3. Save url to remote Firestore
-        final database = context.read<FirestoreService>();
-        await database.setAvatarReference(AvatarReference(downloadUrl));
-
-        // 4. Delete the local file
-        await file.delete();
-
-        // set avatarLoading to false
-
-      }
+      imagePicker = context.read<ImagePickerService>();
+      file = await imagePicker.pickImage(source: ImageSource.gallery);
     } catch (e) {
-      print(e);
-      // set avatarLoading to false
+      print('🟥 Error 1: ' + e.toString());
+    }
+
+    try {
+      storage = context.read<FirebaseStorageService>();
+      downloadUrl = await storage.uploadAvatar(file: file);
+    } catch (e) {
+      print('🟥 Error 2: ' + e.toString());
+    }
+    // 2. Upload the image to remote Storage / get url
+    try {
+      database = context.read<FirestoreService>();
+      await database.setAvatarReference(AvatarReference(downloadUrl!));
+    } catch (e) {
+      print('🟥 Error 3: ' + e.toString());
+    }
+    // 3. Save url to remote Firestore
+
+    try {
+      await file.delete();
+    } catch (e) {
+      print('🟥 Error 4: ' + e.toString());
     }
   }
 
@@ -121,16 +129,17 @@ class HomePage extends StatelessWidget {
         }));
   }
 
-  Widget _buildUserInfo({BuildContext context}) {
+  Widget _buildUserInfo({required BuildContext context}) {
     final database = context.watch<FirestoreService>();
     final avatarLoading = context.watch<ValueNotifier<bool>>();
 
     return StreamBuilder<AvatarReference>(
         stream: database.avatarReferenceStream(),
         builder: (context, snapshot) {
-          final avatarReference = snapshot.data;
+          dynamic avatarReference = snapshot.data;
           return Avatar(
-            photoUrl: avatarReference?.downloadUrl,
+            photoUrl:
+                avatarReference == null ? '' : avatarReference.downloadUrl,
             radius: 50,
             borderColor: Colors.black54,
             borderWidth: 2.0,

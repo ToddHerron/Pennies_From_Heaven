@@ -44,7 +44,7 @@ class AboutPage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserInfo({BuildContext context}) {
+  Widget _buildUserInfo({/*required*/ required BuildContext context}) {
     final database = context.watch<FirestoreService>();
 
     return StreamBuilder<AvatarReference>(
@@ -53,7 +53,7 @@ class AboutPage extends StatelessWidget {
         final avatarReference = snapshot.data;
 
         return Avatar(
-          photoUrl: avatarReference?.downloadUrl,
+          photoUrl: avatarReference == null ? '' : avatarReference.downloadUrl,
           radius: 50,
           borderColor: Colors.black54,
           borderWidth: 2.0,

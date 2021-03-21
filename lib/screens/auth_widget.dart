@@ -8,8 +8,9 @@ import 'package:pennies_from_heaven/screens/sign_in/sign_in_page.dart';
 // An [AuthWidgetBuilder] ancestor is require for this widget to work.
 
 class AuthWidget extends StatelessWidget {
-  const AuthWidget({Key key, @required this.userSnapshot}) : super(key: key);
-  final AsyncSnapshot<User> userSnapshot;
+  const AuthWidget({Key? key, /*required*/ required this.userSnapshot})
+      : super(key: key);
+  final AsyncSnapshot<User?> userSnapshot;
 
   @override
   Widget build(BuildContext context) {

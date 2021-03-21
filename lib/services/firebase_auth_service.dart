@@ -6,11 +6,11 @@ import 'package:pennies_from_heaven/models/user.dart';
 class FirebaseAuthService {
   final _firebaseAuth = auth.FirebaseAuth.instance;
 
-  User _userFromFirebase(auth.User user) {
+  User? _userFromFirebase(auth.User? user) {
     return user == null ? null : User(uid: user.uid);
   }
 
-  Stream<User> get authStateChanges {
+  Stream<User?> get authStateChanges {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
@@ -18,7 +18,7 @@ class FirebaseAuthService {
 
   // TODO Create more graceful error handling
 
-  Future<User> signInAnonymously() async {
+  Future<User?> signInAnonymously() async {
     try {
       auth.UserCredential userCredential =
           await _firebaseAuth.signInAnonymously();

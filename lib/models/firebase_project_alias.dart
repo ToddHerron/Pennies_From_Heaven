@@ -2,7 +2,7 @@ import 'package:rxdart/rxdart.dart';
 
 class FirebaseProjectAlias {
   // ignore: close_sinks
-  BehaviorSubject _firebaseProjectAlias =
+  late BehaviorSubject _firebaseProjectAlias =
       BehaviorSubject.seeded("No Firebase Project Alias Specified");
 
   Stream get stream$ => _firebaseProjectAlias.stream;

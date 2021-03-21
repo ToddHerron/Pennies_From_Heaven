@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pennies_from_heaven/models/avatar_reference.dart';
 import 'package:pennies_from_heaven/services/firestore_path.dart';
-import 'package:flutter/foundation.dart';
 
 class FirestoreService {
-  FirestoreService({@required this.uid}) : assert(uid != null);
+  FirestoreService({required this.uid});
   final String uid;
 
   // Sets the avatar download url
@@ -22,6 +21,6 @@ class FirestoreService {
     final reference = FirebaseFirestore.instance.doc(path);
     final snapshots = reference.snapshots();
     return snapshots
-        .map((snapshot) => AvatarReference.fromMap(snapshot.data()));
+        .map((snapshot) => AvatarReference.fromMap(snapshot.data()!));
   }
 }
