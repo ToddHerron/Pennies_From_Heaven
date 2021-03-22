@@ -18,21 +18,21 @@ class FirebaseAuthService {
 
   // TODO Create more graceful error handling
 
-  Future<User?> signInAnonymously() async {
-    try {
-      auth.UserCredential userCredential =
-          await _firebaseAuth.signInAnonymously();
-      return _userFromFirebase(userCredential.user);
-    } catch (e) {
-      print('🟥 🟥 🟥 Error ' + e.toString());
-      return null;
-    }
-  }
+  // Future<User?> signInAnonymously() async {
+  //   try {
+  //     auth.UserCredential userCredential =
+  //         await _firebaseAuth.signInAnonymously();
+  //     return _userFromFirebase(userCredential.user);
+  //   } catch (e) {
+  //     print('🟥 🟥 🟥 Error ' + e.toString());
+  //     return null;
+  //   }
+  // }
 
   // Register with email and password
 
-  Future<User?> registerInWithEmailAndPassword(
-      String email, String password) async {
+  Future<User?> registerWithEmailAndPassword(
+      {required String email, required String password}) async {
     try {
       auth.UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -46,7 +46,7 @@ class FirebaseAuthService {
   // Sign in with email and password
 
   Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+      {required String email, required String password}) async {
     try {
       auth.UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
