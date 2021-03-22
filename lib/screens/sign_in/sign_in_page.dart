@@ -6,28 +6,127 @@ import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
 import 'package:provider/provider.dart';
 
-class SignInPage extends StatelessWidget {
-  Future<void> _signInAnonymously(BuildContext context) async {
-    try {
-      final auth = context.read<FirebaseAuthService>();
-      final user = await (auth.signInAnonymously());
-      print("🟩 🟩 🟩  uid = ${user?.uid}");
-    } catch (e) {
-      print("🟥 🟥 🟥  Sign In Anonymously error " + e.toString());
-    }
+class SignInPage extends StatefulWidget {
+  final Function toggleView;
+
+  SignInPage({Key? key, required this.toggleView}) : super(key: key);
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? _email = '';
+  String? _password = '';
+  bool _obscureText = true;
+  void _togglePasswordVisiblity() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
+
+  // Future<void> _signInAnonymously(BuildContext context) async {
+  //   try {
+  //     final auth = context.read<FirebaseAuthService>();
+  //     final user = await (auth.signInAnonymously());
+  //     print("🟩 🟩 🟩  uid = ${user?.uid}");
+  //   } catch (e) {
+  //     print("🟥 🟥 🟥  Sign In Anonymously error " + e.toString());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign in'), elevation: 0.0),
+      appBar: AppBar(
+        title: Text('Sign in'),
+        elevation: 0.0,
+        actions: <Widget>[
+          TextButton.icon(
+            label: Text(
+              'Register',
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.white,
+              ),
+            ),
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              widget.toggleView();
+            }, //TODO: Navigate to Register screen
+          ),
+        ],
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Center(
-            child: ElevatedButton(
-              child: Text('Sign in anonymously'),
-              onPressed: () => _signInAnonymously(context),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 130.0, horizontal: 50.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          labelText: "email", hintText: "Enter your email"),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email address';
+                        }
+                        return null;
+                      },
+                      onChanged: (String? value) {
+                        setState(() =>
+                            _email = value == null ? value : value.trim());
+                      },
+                    ),
+                    SizedBox(height: 6.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: "Enter your password",
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: _togglePasswordVisiblity,
+                        ),
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                      onChanged: (String? value) {
+                        setState(() =>
+                            _password = value == null ? value : value.trim());
+                      },
+                      obscureText: _obscureText,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              print('+++++ email = $_email +++++');
+                              print('+++++ password = $_password +++++');
+                            }
+                          },
+                          child: const Text('Sign In'),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
           Center(
