@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/common/constants.dart';
 import 'package:pennies_from_heaven/common/loadingSpinner.dart';
+import 'package:pennies_from_heaven/models/sign_in_auth_error.dart';
 import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
 
@@ -22,7 +24,9 @@ class _SignInPageState extends State<SignInPage> {
 
   String? _email = '';
   String? _password = '';
-  String? _error = '';
+  bool _emailValidationError = false;
+  bool _passwordValidationError = false;
+
   bool _obscureText = true;
   void _togglePasswordVisiblity() {
     setState(() {
@@ -81,46 +85,74 @@ class _SignInPageState extends State<SignInPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          TextFormField(
-                            decoration: formInputDecoration.copyWith(
-                                labelText: 'Email',
-                                hintText: 'Enter your email address'),
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email address';
-                              }
-                              return null;
-                            },
-                            onChanged: (String? value) {
-                              setState(() => _email =
-                                  value == null ? value : value.trim());
-                            },
-                          ),
-                          SizedBox(height: 6.0),
-                          TextFormField(
-                            decoration: formInputDecoration.copyWith(
-                              labelText: 'Password',
-                              hintText: "Enter your password",
-                              suffixIcon: IconButton(
-                                icon: Icon(_obscureText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onPressed: _togglePasswordVisiblity,
+                          Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints.loose(const Size(
+                                  kIsWeb ? 300 : double.infinity,
+                                  kIsWeb ? 60 : double.infinity)),
+                              child: TextFormField(
+                                decoration: formInputDecoration.copyWith(
+                                    labelText: 'Email',
+                                    hintText: 'Enter your email address'),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    setState(() {
+                                      _emailValidationError = true;
+                                    });
+                                    GetIt.I<SignInAuthError>()
+                                        .setSignInAuthError("");
+                                    return 'Please enter your email address';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (String? value) {
+                                  setState(() => _email =
+                                      value == null ? value : value.trim());
+                                },
                               ),
                             ),
-                            validator: (String? value) {
-                              if (value == null || value.length < 6) {
-                                return 'Please enter a password 6+ characters long';
-                              }
-                              return null;
-                            },
-                            onChanged: (String? value) {
-                              setState(() => _password =
-                                  value == null ? value : value.trim());
-                            },
-                            obscureText: _obscureText,
                           ),
-                          SizedBox(height: 18.0),
+                          _emailValidationError
+                              ? SizedBox(height: 9.0)
+                              : SizedBox(height: 30.0),
+                          Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints.loose(const Size(
+                                  kIsWeb ? 300 : double.infinity,
+                                  kIsWeb ? 60 : double.infinity)),
+                              child: TextFormField(
+                                decoration: formInputDecoration.copyWith(
+                                  labelText: 'Password',
+                                  hintText: "Enter your password",
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: _togglePasswordVisiblity,
+                                  ),
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.length < 6) {
+                                    setState(() {
+                                      _passwordValidationError = true;
+                                    });
+                                    GetIt.I<SignInAuthError>()
+                                        .setSignInAuthError("");
+                                    return 'Please enter a password 6+ characters long';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (String? value) {
+                                  setState(() => _password =
+                                      value == null ? value : value.trim());
+                                },
+                                obscureText: _obscureText,
+                              ),
+                            ),
+                          ),
+                          _passwordValidationError
+                              ? SizedBox(height: 8.0)
+                              : SizedBox(height: 30.0),
                           Center(
                             child: ElevatedButton(
                               onPressed: () async {
@@ -129,6 +161,8 @@ class _SignInPageState extends State<SignInPage> {
                                   // print('+++++ password = $_password +++++');
                                   setState(() {
                                     _loading = true;
+                                    _emailValidationError = false;
+                                    _passwordValidationError = false;
                                   });
                                   dynamic result =
                                       await _auth.signInWithEmailAndPassword(
@@ -136,8 +170,6 @@ class _SignInPageState extends State<SignInPage> {
 
                                   if (result == null) {
                                     setState(() {
-                                      _error =
-                                          "Please provide valid credentials";
                                       _loading = false;
                                     });
                                   }
@@ -150,9 +182,13 @@ class _SignInPageState extends State<SignInPage> {
                             height: 18.0,
                           ),
                           Center(
-                            child: Text(_error!,
-                                style: TextStyle(
-                                    color: Colors.red, fontSize: 14.0)),
+                            child: StreamBuilder<Object?>(
+                                stream: GetIt.I<SignInAuthError>().stream$,
+                                builder: (context, snapshot) {
+                                  return Text('${snapshot.data}',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 14.0));
+                                }),
                           )
                         ],
                       ),

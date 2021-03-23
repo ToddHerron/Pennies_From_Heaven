@@ -1,3 +1,5 @@
+import 'package:pennies_from_heaven/models/register_auth_error.dart';
+import 'package:pennies_from_heaven/models/sign_in_auth_error.dart';
 import 'package:pennies_from_heaven/screens/auth_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -15,6 +17,8 @@ final getIt = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GetIt.I.registerSingleton<FirebaseProjectAlias>(FirebaseProjectAlias());
+  GetIt.I.registerSingleton<RegisterAuthError>(RegisterAuthError());
+  GetIt.I.registerSingleton<SignInAuthError>(SignInAuthError());
   FirebaseApp firebaseApp = await Firebase.initializeApp();
   GetIt.I<FirebaseProjectAlias>().setFirebaseProjectAlias(
       firebaseProjectAliases[firebaseApp.options.projectId]);
