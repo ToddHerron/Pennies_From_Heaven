@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/common/constants.dart';
 import 'package:pennies_from_heaven/common/loadingSpinner.dart';
 import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
-import 'package:provider/provider.dart';
 
 class RegisterEmailPage extends StatefulWidget {
   final Function toggleView;
@@ -68,7 +65,7 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
                   ),
                   onPressed: () {
                     widget.toggleView();
-                  }, //TODO: Navigate to Sign In screen
+                  },
                 ),
               ],
             ),
