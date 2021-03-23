@@ -46,6 +46,7 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
     return _loading
         ? LoadingSpinner()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.lightBlue[100],
             appBar: AppBar(
               title: Text('Register'),

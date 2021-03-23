@@ -45,6 +45,7 @@ class _SignInPageState extends State<SignInPage> {
     return _loading
         ? LoadingSpinner()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.lightBlue[100],
             appBar: AppBar(
               title: Text('Sign in'),
