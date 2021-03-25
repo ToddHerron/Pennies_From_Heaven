@@ -29,7 +29,6 @@ void main() async {
   FirebaseApp firebaseApp = await Firebase.initializeApp();
   GetIt.I<FirebaseProjectAlias>().setFirebaseProjectAlias(
       firebaseProjectAliases[firebaseApp.options.projectId]);
-  print('🟩 🟩 🟩  Firebase Project       = ${firebaseApp.options.projectId}');
   print('🟩 🟩 🟩  Firebase Project Alias = ' +
       firebaseProjectAliases[firebaseApp.options.projectId]);
   runApp(MyApp());
@@ -57,14 +56,14 @@ class MyApp extends StatelessWidget {
                     builder: (context, snapshot) {
                       return Banner(
                         message: '${snapshot.data}',
-                        color: Colors.green,
+                        color: '${snapshot.data}' == 'dev'
+                            ? Colors.green
+                            : Colors.red,
                         location: BannerLocation.topStart,
                         child: MaterialApp(
                           theme: ThemeData(primarySwatch: Colors.indigo),
-                          home: SafeArea(
-                            child: AuthWidget(
-                              userSnapshot: userSnapshot,
-                            ),
+                          home: AuthWidget(
+                            userSnapshot: userSnapshot,
                           ),
                         ),
                       );
