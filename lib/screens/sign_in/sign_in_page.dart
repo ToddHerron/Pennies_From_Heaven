@@ -183,7 +183,10 @@ class _SignInPageState extends State<SignInPage> {
                           StreamBuilder<Object?>(
                               stream: GetIt.I<SignInAuthError>().stream$,
                               builder: (context, snapshot) {
-                                return Text('${snapshot.data}',
+                                return Text(
+                                    snapshot.data == null
+                                        ? ''
+                                        : '${snapshot.data}',
                                     style: TextStyle(
                                         color: Colors.red, fontSize: 14.0));
                               })

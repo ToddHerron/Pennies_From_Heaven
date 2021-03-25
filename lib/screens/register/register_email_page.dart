@@ -173,7 +173,10 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
                               child: StreamBuilder<Object?>(
                                   stream: GetIt.I<RegisterAuthError>().stream$,
                                   builder: (context, snapshot) {
-                                    return Text('${snapshot.data}',
+                                    return Text(
+                                        snapshot.data == null
+                                            ? ''
+                                            : '${snapshot.data}',
                                         style: TextStyle(
                                             color: Colors.red, fontSize: 14.0));
                                   }))
