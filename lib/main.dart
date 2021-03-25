@@ -16,9 +16,16 @@ import 'models/firebase_project_alias.dart';
 final getIt = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase project the app is pointing to
   GetIt.I.registerSingleton<FirebaseProjectAlias>(FirebaseProjectAlias());
+
+  // Firebase Auth "register user" error
   GetIt.I.registerSingleton<RegisterAuthError>(RegisterAuthError());
+
+  // Firebase Auth "sign in" error
   GetIt.I.registerSingleton<SignInAuthError>(SignInAuthError());
+
   FirebaseApp firebaseApp = await Firebase.initializeApp();
   GetIt.I<FirebaseProjectAlias>().setFirebaseProjectAlias(
       firebaseProjectAliases[firebaseApp.options.projectId]);
@@ -43,13 +50,25 @@ class MyApp extends StatelessWidget {
           stream: getIt<FirebaseProjectAlias>().stream$,
           builder: (context, snapshot) {
             return AuthWidgetBuilder(builder: (context, userSnapshot) {
-              return MaterialApp(
-                theme: ThemeData(primarySwatch: Colors.indigo),
-                home: SafeArea(
-                  child: AuthWidget(
-                    userSnapshot: userSnapshot,
-                  ),
-                ),
+              return Directionality(
+                textDirection: TextDirection.ltr,
+                child: StreamBuilder<Object?>(
+                    stream: GetIt.I<FirebaseProjectAlias>().stream$,
+                    builder: (context, snapshot) {
+                      return Banner(
+                        message: '${snapshot.data}',
+                        color: Colors.green,
+                        location: BannerLocation.topStart,
+                        child: MaterialApp(
+                          theme: ThemeData(primarySwatch: Colors.indigo),
+                          home: SafeArea(
+                            child: AuthWidget(
+                              userSnapshot: userSnapshot,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
               );
             });
           }),

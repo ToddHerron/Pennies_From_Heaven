@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/common/constants.dart';
 import 'package:pennies_from_heaven/common/loadingSpinner.dart';
 import 'package:pennies_from_heaven/models/register_auth_error.dart';
-import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
 
 class RegisterEmailPage extends StatefulWidget {
@@ -183,16 +182,6 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
                     ),
                   ),
                 ),
-                StreamBuilder<Object?>(
-                    // stream: GetIt.I<BuildFlavor>().stream$,
-                    stream: GetIt.I<FirebaseProjectAlias>().stream$,
-                    builder: (context, snapshot) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:
-                            Text('Firebase Project Alias = ${snapshot.data}'),
-                      );
-                    })
               ],
             ),
           );

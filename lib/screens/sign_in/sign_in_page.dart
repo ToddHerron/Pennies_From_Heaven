@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/common/constants.dart';
 import 'package:pennies_from_heaven/common/loadingSpinner.dart';
 import 'package:pennies_from_heaven/models/sign_in_auth_error.dart';
-import 'package:pennies_from_heaven/models/firebase_project_alias.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
 
 class SignInPage extends StatefulWidget {
@@ -181,32 +180,18 @@ class _SignInPageState extends State<SignInPage> {
                           SizedBox(
                             height: 18.0,
                           ),
-                          Center(
-                            child: StreamBuilder<Object?>(
-                                stream: GetIt.I<SignInAuthError>().stream$,
-                                builder: (context, snapshot) {
-                                  return Text('${snapshot.data}',
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 14.0));
-                                }),
-                          )
+                          StreamBuilder<Object?>(
+                              stream: GetIt.I<SignInAuthError>().stream$,
+                              builder: (context, snapshot) {
+                                return Text('${snapshot.data}',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 14.0));
+                              })
                         ],
                       ),
                     ),
                   ),
                 ),
-                Center(
-                  child: StreamBuilder<Object?>(
-                      // stream: GetIt.I<BuildFlavor>().stream$,
-                      stream: GetIt.I<FirebaseProjectAlias>().stream$,
-                      builder: (context, snapshot) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child:
-                              Text('Firebase Project Alias = ${snapshot.data}'),
-                        );
-                      }),
-                )
               ],
             ),
           );
