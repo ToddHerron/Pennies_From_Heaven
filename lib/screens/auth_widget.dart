@@ -1,8 +1,8 @@
 import 'package:pennies_from_heaven/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:pennies_from_heaven/screens/home/home_page.dart';
-import 'package:pennies_from_heaven/screens/register/register_email_page.dart';
-import 'package:pennies_from_heaven/screens/sign_in/sign_in_page.dart';
+import 'authentication/register/register_email_page.dart';
+import 'authentication/sign_in/sign_in_page.dart';
 
 // Builds the signed-in or non-signed-in UI, depending on the user snapshot
 // This widget should be below the [MaterialApp].
