@@ -1,6 +1,6 @@
+import 'package:flutter_auth_ui/flutter_auth_ui.dart';
 import 'package:pennies_from_heaven/models/register_auth_error.dart';
 import 'package:pennies_from_heaven/models/sign_in_auth_error.dart';
-import 'package:pennies_from_heaven/screens/auth_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -61,9 +61,58 @@ class MyApp extends StatelessWidget {
                             : Colors.red,
                         location: BannerLocation.topStart,
                         child: MaterialApp(
-                          theme: ThemeData(primarySwatch: Colors.indigo),
-                          home: AuthWidget(
-                            userSnapshot: userSnapshot,
+                          home: Scaffold(
+                            appBar: AppBar(
+                              title: const Text('Plugin example app'),
+                            ),
+                            body: Center(
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    child: const Text("start ui"),
+                                    onPressed: () async {
+                                      print("🟦 🟦 🟦 You are here!");
+                                      final providers = [
+                                        AuthUiItem.AuthAnonymous,
+                                        AuthUiItem.AuthEmail,
+                                        AuthUiItem.AuthPhone,
+                                        AuthUiItem.AuthApple,
+                                        AuthUiItem.AuthGithub,
+                                        AuthUiItem.AuthGoogle,
+                                        AuthUiItem.AuthMicrosoft,
+                                        AuthUiItem.AuthYahoo,
+                                      ];
+
+                                      final result =
+                                          await FlutterAuthUi.startUi(
+                                        items: providers,
+                                        tosAndPrivacyPolicy:
+                                            TosAndPrivacyPolicy(
+                                          tosUrl: "https://www.google.com",
+                                          privacyPolicyUrl:
+                                              "https://www.google.com",
+                                        ),
+                                        androidOption: AndroidOption(
+                                          enableSmartLock:
+                                              false, // default true
+                                        ),
+                                        // If you need EmailLink mode, please set EmailAuthOption
+                                        emailAuthOption: EmailAuthOption(
+                                          requireDisplayName:
+                                              true, // default true
+                                          enableMailLink:
+                                              false, // default false
+                                          handleURL: '',
+                                          androidPackageName: '',
+                                          androidMinimumVersion: '',
+                                        ),
+                                      );
+                                      print(result);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       );
