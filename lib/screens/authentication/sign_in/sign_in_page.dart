@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_ui/flutter_auth_ui.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pennies_from_heaven/common/constants.dart';
 import 'package:pennies_from_heaven/common/loadingSpinner.dart';
@@ -7,9 +8,7 @@ import 'package:pennies_from_heaven/models/sign_in_auth_error.dart';
 import 'package:pennies_from_heaven/services/firebase_auth_service.dart';
 
 class SignInPage extends StatefulWidget {
-  final Function toggleView;
-
-  SignInPage({Key? key, required this.toggleView}) : super(key: key);
+  SignInPage({Key? key}) : super(key: key);
   @override
   _SignInPageState createState() => _SignInPageState();
 }
@@ -32,16 +31,6 @@ class _SignInPageState extends State<SignInPage> {
       _obscureText = !_obscureText;
     });
   }
-
-  // Future<void> _signInAnonymously(BuildContext context) async {
-  //   try {
-  //     final auth = context.read<FirebaseAuthService>();
-  //     final user = await (auth.signInAnonymously());
-  //     print("🟩 🟩 🟩  uid = ${user?.uid}");
-  //   } catch (e) {
-  //     print("🟥 🟥 🟥  Sign In Anonymously error " + e.toString());
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +55,48 @@ class _SignInPageState extends State<SignInPage> {
                     Icons.person,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-                    widget.toggleView();
+                  onPressed: () async {
+                    final providers = kIsWeb
+                        ? [
+                            AuthUiItem.AuthAnonymous,
+                            AuthUiItem.AuthEmail,
+                          ]
+                        : [
+                            AuthUiItem.AuthAnonymous,
+                            AuthUiItem.AuthEmail,
+                            AuthUiItem.AuthPhone
+                          ];
+
+                    // final providers = [
+                    // AuthUiItem.AuthAnonymous,
+                    // AuthUiItem.AuthEmail,
+                    // AuthUiItem.AuthPhone,
+                    // AuthUiItem.AuthApple,
+                    // AuthUiItem.AuthGithub,
+                    // AuthUiItem.AuthGoogle,
+                    // AuthUiItem.AuthMicrosoft,
+                    // AuthUiItem.AuthYahoo,
+                    // ];
+
+                    await FlutterAuthUi.startUi(
+                      items: providers,
+                      tosAndPrivacyPolicy: TosAndPrivacyPolicy(
+                        tosUrl: "https://www.google.com",
+                        privacyPolicyUrl: "https://www.google.com",
+                      ),
+                      androidOption: AndroidOption(
+                        enableSmartLock: false,
+                        showLogo: true, // default true
+                      ),
+                      // If you need EmailLink mode, please set EmailAuthOption
+                      emailAuthOption: EmailAuthOption(
+                        requireDisplayName: true, // default true
+                        enableMailLink: false, // default false
+                        handleURL: '',
+                        androidPackageName: '',
+                        androidMinimumVersion: '',
+                      ),
+                    );
                   },
                 ),
               ],

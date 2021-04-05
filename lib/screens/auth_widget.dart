@@ -1,7 +1,6 @@
 import 'package:pennies_from_heaven/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:pennies_from_heaven/screens/home/home_page.dart';
-import 'authentication/register/register_email_page.dart';
 import 'authentication/sign_in/sign_in_page.dart';
 
 // Builds the signed-in or non-signed-in UI, depending on the user snapshot
@@ -25,15 +24,10 @@ class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.userSnapshot.connectionState == ConnectionState.active) {
-      return widget.userSnapshot.hasData
-          ? HomePage()
-          : showSignIn
-              ? SignInPage(toggleView: toggleView)
-              : RegisterEmailPage(toggleView: toggleView);
+      return widget.userSnapshot.hasData ? HomePage() : SignInPage();
     }
-    return Scaffold(
-        body: Center(
+    return Center(
       child: CircularProgressIndicator(),
-    ));
+    );
   }
 }

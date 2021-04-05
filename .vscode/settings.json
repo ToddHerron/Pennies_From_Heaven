@@ -2,5 +2,6 @@
     "debug.allowBreakpointsEverywhere": true,
     "debug.inlineValues": true,
     "dart.debugExternalLibraries": true,
-    "dart.debugSdkLibraries": true
+    "dart.debugSdkLibraries": true,
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
