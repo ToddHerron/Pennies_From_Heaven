@@ -58,10 +58,13 @@ class _SignInPageState extends State<SignInPage> {
                   onPressed: () async {
                     final providers = kIsWeb
                         ? [
+                            AuthUiItem.AuthGoogle,
                             AuthUiItem.AuthAnonymous,
-                            AuthUiItem.AuthEmail,
+                            AuthUiItem
+                                .AuthEmail, // AuthPhone CAPTCHA is buggy on the web
                           ]
                         : [
+                            AuthUiItem.AuthGoogle,
                             AuthUiItem.AuthAnonymous,
                             AuthUiItem.AuthEmail,
                             AuthUiItem.AuthPhone

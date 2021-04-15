@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "387393806114-v3mm0vgtc2qnotk1fdbqthgttpp1hnmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.penniesfromheaven.dev",
+            "certificate_hash": "31ee8cb071b6481219133e14838283f14edda425"
+          }
+        },
+        {
           "client_id": "387393806114-bmu498rvl3kdnkb035h7gtfrtspi7b4s.apps.googleusercontent.com",
           "client_type": 3
         }
