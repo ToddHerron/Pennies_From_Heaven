@@ -33,7 +33,9 @@ dependencies:
   firebase_auth_web: ^1.0.0 
   cloud_firestore: ^1.0.0 
   firebase_storage: ^8.0.0 
-  image_picker: ^0.7.2 
+  image_picker: ^0.7.4
+  image_picker_for_web: ^2.0.0
+  image_picker_platform_interface: ^2.0.1
   flutter_spinkit: ^5.0.0
   get_it: ^6.0.0
   rxdart: ^0.26.0
